@@ -13,7 +13,7 @@
    Board : Boards := external ("BOARD", "RM57-LAUNCHPAD");
 
    package Compiler is
-      Common_Required_Switches := ("-mlittle-endian", "-mfpu=vfpv3-d16", "-mhard-float",
+      Common_Required_Switches := ("-mbig-endian", "-mfpu=vfpv3-d16", "-mhard-float",
         "-mcpu=cortex-r4");
 
       for Leading_Required_Switches ("Ada") use
@@ -25,7 +25,7 @@
          Common_Required_Switches;
 
       for Leading_Required_Switches ("Asm_Cpp") use
-         ("-c", "-mfpu=vfpv3-d16", "-mhard-float", "-mcpu=cortex-r4" );
+         ("-c", "-mfpu=vfpv3-d16", "-mhard-float", "-mcpu=cortex-r4", "-mbig-endian");
    end Compiler;
 
    package Linker is

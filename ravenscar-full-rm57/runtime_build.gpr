@@ -23,7 +23,7 @@ project Runtime_Build is
   package Compiler is
      CFLAGS := ("-fcallgraph-info=su,da",
                 "-ffunction-sections", "-fdata-sections");
-     ASMFLAGS := ();
+     ASMFLAGS := ("-mbig-endian");
      case Build is
         when "Production" =>
            CFLAGS := CFLAGS & ("-O2");
@@ -31,8 +31,8 @@ project Runtime_Build is
            CFLAGS := CFLAGS & ("-O0", "-g");
            ASMFLAGS := ASMFLAGS & ("-g");
      end case;
-     ALL_ADAFLAGS := ("-gnatpg", "-gnatn2", "-nostdinc") & CFLAGS;
-     ALL_CFLAGS := ("-DIN_RTS", "-Dinhibit_libc") & CFLAGS;
+     ALL_ADAFLAGS := ("-gnatpg", "-gnatn2", "-nostdinc", "-mbig-endian") & CFLAGS;
+     ALL_CFLAGS := ("-DIN_RTS", "-Dinhibit_libc", "-mbig-endian") & CFLAGS;
 
      NO_SIBLING_ADAFLAGS := ("-fno-optimize-sibling-calls");
      NO_REORDER_ADAFLAGS := ("-fno-toplevel-reorder");
