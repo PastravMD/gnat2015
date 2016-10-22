@@ -31,35 +31,57 @@ with System.RM57;   use System.RM57;
 pragma Warnings (On);
 with GioPorts;      use GioPorts;
 
+with TMS570LC43xx;       use TMS570LC43xx;
+with TMS570LC43xx.Gio;   use TMS570LC43xx.Gio;
+with TMS570LC43xx.GioB;  use TMS570LC43xx.GioB;
+
 package body Driver is
    So    : Suspension_Object;
    task body Controller1 is
-      Period     : constant Time_Span := Milliseconds (200);
+      Period     : constant Time_Span := Milliseconds (500);
       Next_Start : Time;
+
    begin
       loop
          Next_Start := Clock;
-         GioSetBit(GIO_B, 6, True);
+         -- original API
+         --GioSetBit(GIO_B, 6, True);
+
+         -- new API
+         --GioB_Periph.DOut.GioDOut.Arr(6) := 1;
+         GioB_Periph.DOut.GioDOut.Val := 16#0#;
+
          Next_Start := Next_Start + Period;
          delay until Next_Start;
          Set_True (So);
-         GioSetBit(GIO_B, 6, False);
+
+         -- original API
+         --GioSetBit(GIO_B, 6, False);
+         -- new API
+         --GioB_Periph.DOut.GioDOut.Arr(6) := 0;
+         GioB_Periph.DOut.GioDOut.Val := 16#FF#;
+
+
          Next_Start := Next_Start + Period;
          delay until Next_Start;
       end loop;
    end Controller1;
 
    task body Controller2 is
-      Period     : constant Time_Span := Milliseconds (100);
+      Period     : constant Time_Span := Milliseconds (200);
       Next_Start : Time;
    begin
       loop
          Suspend_Until_True (So);
-         GioSetBit(GIO_B, 7, True);
+         --GioSetBit(GIO_B, 7, True);
+
+
          Next_Start := Clock;
          Next_Start := Next_Start + Period;
          delay until Next_Start;
-         GioSetBit(GIO_B, 7, False);
+         --GioSetBit(GIO_B, 7, False);
+
+
          Next_Start := Next_Start + Period;
          delay until Next_Start;
          Set_False (So);
